@@ -10,8 +10,12 @@ function Powerup:init(skin)
     self.dy = 0
     self.dx = 0
 
+    self.x = 0
+    self.y = 0
+
     -- references type of powerup. Ball powerup is #7
     self.skin = skin
+    self.inPlay = false
 end
 
 function Powerup:update(dt)
@@ -20,16 +24,31 @@ function Powerup:update(dt)
     self.y = self.y + self.dy * dt
 end
 
-function Powerup:place()
-    self.x = VIRTUAL_WIDTH / 2
-    self.y = 0
+function Powerup:reset()
+    self.x = 200
+    self.y = 50
 end
 
-function Powerup:collides(paddle)
-    --TODO: Trigger powerup effect when it hits paddle
+function Powerup:collides(target)
+        -- first, check to see if the left edge of either is farther to the right
+    -- than the right edge of the other
+    if self.x > target.x + target.width or target.x > self.x + self.width then
+        return false
+    end
+
+    -- then check to see if the bottom edge of either is higher than the top
+    -- edge of the other
+    if self.y > target.y + target.height or target.y > self.y + self.height then
+        return false
+    end 
+
+    -- if the above aren't true, they're overlapping
+    return true
 end
 
 function Powerup:render()
-    love.graphics.draw(gTextures['main'], gFrames['powerups'][self.skin],
-    self.x, self.y)
+    if self.inPlay then
+        love.graphics.draw(gTextures['main'], gFrames['powerups'][self.skin],
+        self.x, self.y)
+    end
 end
