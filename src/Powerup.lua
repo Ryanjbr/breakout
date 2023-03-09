@@ -13,7 +13,7 @@ function Powerup:init(skin)
     self.x = 0
     self.y = 0
 
-    -- references type of powerup. Ball powerup is #7
+    -- references type of powerup. Ball powerup is #7. Key powerup is #10.
     self.skin = skin
     self.inPlay = false
 end
@@ -25,7 +25,8 @@ function Powerup:update(dt)
 end
 
 function Powerup:reset()
-    self.x = 200
+    -- powerup can appear anywhere on the x axis
+    self.x = math.random(0, VIRTUAL_WIDTH)
     self.y = 50
 end
 
