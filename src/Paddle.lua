@@ -30,7 +30,6 @@ function Paddle:init(skin)
     self.dx = 0
 
     -- starting dimensions
-    self.width = 64
     self.height = 16
 
     -- the skin only has the effect of changing our color, used to offset us
@@ -40,6 +39,8 @@ function Paddle:init(skin)
     -- the variant is which of the four paddle sizes we currently are; 2
     -- is the starting size, as the smallest is too tough to start with
     self.size = 2
+    self.width = self.size * 32
+
 end
 
 function Paddle:update(dt)

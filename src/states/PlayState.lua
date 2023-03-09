@@ -38,7 +38,7 @@ function PlayState:enter(params)
     -- powerup is for extra ball (only one for now)
     self.powerup.skin = 7
 
-    self.recoverPoints = 5000
+    self.recoverPoints = 50
 
     -- give ball random starting velocity
     self.balls[1].dx = math.random(-200, 200)
@@ -82,7 +82,7 @@ function PlayState:update(dt)
             
             -- else if we hit the paddle on its right side while moving right...
             elseif ball.x > self.paddle.x + (self.paddle.width / 2) and self.paddle.dx > 0 then
-                selfball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - ball.x))
+                ball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - ball.x))
             end
 
             gSounds['paddle-hit']:play()
@@ -100,7 +100,7 @@ function PlayState:update(dt)
                 -- trigger the brick's hit function, which removes it from play
                 brick:hit()
 
-                -- if we have enough points, recover a point of health
+                -- if we have enough points, recover a point of health and increase paddle size
                 if self.score > self.recoverPoints then
                     -- can't go above 3 health
                     self.health = math.min(3, self.health + 1)
@@ -110,6 +110,10 @@ function PlayState:update(dt)
 
                     -- play recover sound effect
                     gSounds['recover']:play()
+
+                    -- increase paddle size - can't go above size 4
+                    self.paddle.size = math.min(4, self.paddle.size + 1)
+                    self.paddle.width = self.paddle.size * 32
                 end
 
                 -- go to our victory screen if there are no more bricks left
@@ -122,7 +126,7 @@ function PlayState:update(dt)
                         health = self.health,
                         score = self.score,
                         highScores = self.highScores,
-                        ball = self.ball,
+                        balls = self.balls,
                         recoverPoints = self.recoverPoints
                     })
                 end
@@ -182,6 +186,9 @@ function PlayState:update(dt)
         if ball.y >= VIRTUAL_HEIGHT then
             if #self.balls == 1 then
                 self.health = self.health - 1
+                -- decrease paddle size, can't go below 1
+                self.paddle.size = math.max(1, self.paddle.size - 1)
+                self.paddle.width = self.paddle.size* 32
                 gSounds['hurt']:play()
 
                 if self.health == 0 then
@@ -236,6 +243,8 @@ function PlayState:update(dt)
             self.powerup.inPlay = false
         end
     end
+
+    
 end
 
 function PlayState:render()

@@ -19,7 +19,12 @@ function VictoryState:enter(params)
     self.highScores = params.highScores
     self.paddle = params.paddle
     self.health = params.health
-    self.ball = params.ball
+    self.ball = params.balls[1]
+    for index,value in pairs(params.balls) do
+        if index > 1 then
+            table.remove(params.balls, index)
+        end
+    end
     self.recoverPoints = params.recoverPoints
 end
 
