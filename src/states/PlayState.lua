@@ -38,7 +38,7 @@ function PlayState:enter(params)
     -- powerup is for extra ball (only one for now)
     self.powerup.skin = 7
 
-    self.recoverPoints = 50
+    self.recoverPoints = 2500
 
     -- give ball random starting velocity
     self.balls[1].dx = math.random(-200, 200)

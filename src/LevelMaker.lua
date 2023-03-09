@@ -123,6 +123,12 @@ function LevelMaker.createMap(level)
     if #bricks == 0 then
         return self.createMap(level)
     else
+        local keyBlock = false
+        --if math.random(0,3) == 1 then
+        if true then
+           index = math.random(1, #bricks)
+           bricks[index].locked = true
+        end    
         return bricks
     end
 end
