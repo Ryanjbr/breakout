@@ -35,8 +35,6 @@ function PlayState:enter(params)
     self.powerup = Powerup()
     self.powerup.x = 200
     self.powerup.y = 50
-    -- powerup is for extra ball (only one for now)
-    self.powerup.skin = 7
 
     self.recoverPoints = 2500
 
@@ -223,7 +221,13 @@ function PlayState:update(dt)
     end
 
     self.timer = self.timer + dt
-    if self.timer > math.random(10,40) then
+    if self.timer > math.random(10,60) then
+        if math.random(1,100) > 70 then
+            -- must add check that there is a locked block
+            self.powerup.skin = 10
+        else 
+            self.powerup.skin = 7
+        end
         self.powerup.x = 200
         self.powerup.y = 50
         self.powerup.inPlay = true
@@ -232,13 +236,17 @@ function PlayState:update(dt)
 
     if self.powerup.inPlay then
         if self.powerup:collides(self.paddle) then
+            if self.powerup.skin == 7 then
             --Spawn two balls
-            for i=1,2 do
-                newBall = Ball(math.random(7))
-                newBall:reset()
-                newBall.dx = math.random(-200, 200)
-                newBall.dy = math.random(-50, -60)
-                table.insert(self.balls, newBall)
+                for i=1,2 do
+                    newBall = Ball(math.random(7))
+                    newBall:reset()
+                    newBall.dx = math.random(-200, 200)
+                    newBall.dy = math.random(-50, -60)
+                    table.insert(self.balls, newBall)
+                end
+            elseif self.powerup.skin == 10 then
+                -- unlock the locked brick
             end
             self.powerup.inPlay = false
         end
